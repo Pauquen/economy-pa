@@ -1,0 +1,49 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "angular-cli": {
+      "type": "local",
+      "command": ["npx", "-y", "@angular/cli", "mcp", "--read-only", "--local-only"],
+      "enabled": true,
+      "environment": {
+        "NG_MCP_CODE_EXAMPLES": "1"
+      }
+    },
+    "filesystem": {
+      "type": "local", 
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/pauloq/Documents/AUTOMATIZATION/IAs/OPENCODE/projects/economy"],
+      "enabled": true
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://mcp.github.com/mcp",
+      "enabled": false
+    }
+  },
+  "lsp": {
+    "typescript": {
+      "command": ["npx", "typescript-language-server", "--stdio"],
+      "extensions": [".ts", ".tsx"],
+      "initialization": {
+        "preferences": {
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
+        }
+      }
+    },
+    "angular": {
+      "command": ["node", "./node_modules/@angular/language-server/bin/ngserver.js", "--stdio", "--logVerbosity", "normal"],
+      "extensions": [".ts", ".html"],
+      "env": {
+        "NG_DEBUG": "false"
+      }
+    },
+    "eslint": {
+      "command": ["npx", "eslint-language-server", "--stdio"],
+      "extensions": [".ts", ".tsx", ".js", ".jsx"]
+    }
+  },
+  "tools": {
+    "github": false
+  }
+}

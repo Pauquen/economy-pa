@@ -1,0 +1,184 @@
+<div class="dashboard-container smooth-fade-in">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="user-greeting">
+        <h1 class="greeting-text">
+          Welcome back, {{ userDisplayName() }}! 👋
+        </h1>
+        <p class="greeting-subtitle">
+          Here's what's happening with your automation workflows today
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <!-- Theme Toggle 
+        <app-button
+          variant="ghost"
+          size="md"
+          [iconRight]="isDarkTheme() ? '🌙' : '☀️'"
+          (onClick)="toggleTheme()"
+        >
+          {{ isDarkTheme() ? 'Dark' : 'Light' }}
+        </app-button>
+        -->
+        <!-- Quick Actions -->
+        <app-button
+          variant="primary"
+          size="md"
+          (onClick)="navigateToRpaBots()"
+        >
+          View RPAs
+        </app-button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Stats -->
+  <section class="stats-section">
+    @for (stat of dashboardStats(); track stat.id) {
+      <app-card
+        variant="elevated"
+        size="md"
+        class="stat-card"
+      >
+        <div class="stat-content">
+          <div class="stat-icon">{{ stat.icon }}</div>
+          <div class="stat-info">
+            <h3 class="stat-value">{{ formatNumber(stat.value) }}</h3>
+            <p class="stat-label">{{ stat.label }}</p>
+            <div class="stat-change" [class.positive]="stat.trend > 0" [class.negative]="stat.trend < 0">
+              @if (stat.trend !== 0) {
+                <span class="trend-icon">{{ stat.trend > 0 ? '📈' : '📉' }}</span>
+                <span class="trend-value">{{ abs(stat.trend) }}%</span>
+              } @else {
+                <span class="trend-neutral">→ 0%</span>
+              }
+            </div>
+          </div>
+        </div>
+      </app-card>
+    }
+  </section>
+
+  <!-- Main Dashboard Content -->
+  <div class="dashboard-main">
+    <!-- Left Column -->
+    <div class="dashboard-column">
+      <!-- Recent Activity -->
+      <app-card variant="outlined" size="lg" class="activity-card">
+        <div slot="header-actions">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="refreshActivity()"
+          >
+            Refresh
+          </app-button>
+        </div>
+
+        <h3 class="card-title">Recent Activity</h3>
+
+        <div class="activity-list">
+          @for (activity of recentActivity(); track activity.id) {
+            <div class="activity-item">
+              <div class="activity-icon">{{ activity.icon }}</div>
+              <div class="activity-content">
+                <p class="activity-title">{{ activity.title }}</p>
+                <p class="activity-description">{{ activity.description }}</p>
+                <span class="activity-time">{{ formatTime(activity.timestamp) }}</span>
+              </div>
+              <div class="activity-status" [class]="activity.status">
+                {{ activity.status }}
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state">
+              <p>No recent activity found</p>
+            </div>
+          }
+        </div>
+      </app-card>
+
+      <!-- Quick Actions -->
+      <app-card variant="default" size="md" class="quick-actions-card">
+        <h3 class="card-title">Quick Actions</h3>
+
+        <div class="quick-actions-grid">
+          <button class="quick-action-btn" (click)="navigateTo('/business')">
+            <div class="action-icon">🏢</div>
+            <span>Business Units</span>
+          </button>
+
+          <button class="quick-action-btn" (click)="navigateTo('/rpabots')">
+            <div class="action-icon">🤖</div>
+            <span>RPA Bots</span>
+          </button>
+
+          <button class="quick-action-btn" (click)="navigateTo('/businessprocess')">
+            <div class="action-icon">⚙️</div>
+            <span>Processes</span>
+          </button>
+
+          <button class="quick-action-btn" (click)="navigateTo('/config')">
+            <div class="action-icon">⚡</div>
+            <span>Settings</span>
+          </button>
+        </div>
+      </app-card>
+    </div>
+
+    <!-- Right Column -->
+    <div class="dashboard-column">
+      <!-- Performance Chart -->
+      <app-card variant="elevated" size="lg" class="chart-card">
+        <h3 class="card-title">Weekly Performance</h3>
+
+        <div class="chart-placeholder">
+          <div class="mock-chart">
+            @for (height of chartBarHeights(); track $index) {
+              <div
+                class="chart-bar"
+                [style.height.%]="height"
+              ></div>
+            }
+          </div>
+          <div class="chart-labels">
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+            <span>Sun</span>
+          </div>
+        </div>
+      </app-card>
+
+      <!-- Top Performers -->
+      <app-card variant="outlined" size="md" class="performers-card">
+        <h3 class="card-title">Top Performing Bots</h3>
+
+        <div class="performers-list">
+          @for (bot of topPerformers(); track bot.id) {
+            <div class="performer-item">
+              <div class="performer-info">
+                <span class="performer-name">{{ bot.name }}</span>
+                <span class="performer-process">{{ bot.processName }}</span>
+              </div>
+              <div class="performer-stats">
+                <span class="success-rate">{{ bot.successRate }}%</span>
+                <div class="progress-bar">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="bot.successRate"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>

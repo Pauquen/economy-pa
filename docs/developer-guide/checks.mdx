@@ -1,0 +1,206 @@
+---
+title: 'EconomyRPA Checks'
+---
+
+This guide explains how to create new business logic and compliance checks in EconomyRPA.
+
+## Introduction
+
+Checks are the core component of EconomyRPA's validation engine. A check is a piece of code designed to validate whether a business process, financial record, or automation workflow aligns with operational best practices and compliance frameworks.
+
+Execution of a check yields a **Finding**, which includes the result and contextual metadata (e.g., outcome, business impact, remediation steps).
+
+### Create a New Check
+
+The most common high-level steps to create a new check are:
+
+1. **Verify Prerequisites**:
+    - Ensure the check does not already exist by searching the codebase or the `skills/economyrpa-compliance` documentation.
+    - Ensure the required **Service** (Django App) exists. If not, follow the [Service Creation](/developer-guide/services) guide.
+    - Confirm the service has implemented the necessary Serializers or Models to access the data required for the check.
+
+2. **Navigate to the Service Directory**:
+    - The path typically follows: `api/apps/<domain>/services/<service>/checks/`.
+
+3. **Create the Check Folder**:
+    - Create a folder matching the check ID. The path should look like: `api/apps/<domain>/services/<service>/checks/<check_name_to_implement>`.
+    - Adhere to the [Naming Format for Checks](#naming-format-for-checks).
+
+4. **Populate the Folder**:
+    - Add the necessary files as specified in [File Creation](#file-creation).
+
+5. **Test Locally**:
+    - Run the check logic locally using the EconomyRPA Test SDK.
+    - Command example: `poetry run pytest api/apps/<domain>/tests/test_checks.py -k <check_name>`
+
+6. **Submit Changes**:
+    - Once the check and its tests pass, submit a Pull Request.
+
+### Name Your Checks Correctly
+
+Checks must be named following the format: `domain_process_entity_action`.
+
+The name components are:
+
+- `domain` – The main business area (e.g., `finance`, `hr`, `logistics`).
+- `process` – The specific workflow being audited (e.g., `invoicing`, `onboarding`, `inventory`).
+- `entity` – The specific data object being evaluated (e.g., `invoice`, `contract`, `stock`).
+- `action` – The condition being checked (e.g., `paid`, `signed`, `sufficient`, `approved`).
+
+**Example:** `finance_invoicing_invoice_approved`
+
+### Create the Check Files
+
+Each check in EconomyRPA follows a straightforward structure. Within the newly created folder, three files must be added:
+
+- `__init__.py` (empty file) – Ensures Python treats the folder as a package.
+- `<check_name>.py` (code file) – Contains the Python logic.
+- `<check_name>.metadata.json` (metadata file) – Defines the business context, severity, and remediation steps.
+
+## EconomyRPA Check Code Structure
+
+EconomyRPA checks are designed for clarity and integration with the Django DRF backend. They follow a pattern where a class inherits from a base `Check` model.
+
+```python title="Generic Check Class"
+# Required Imports
+from economyrpa.core.checks.models import Check, CheckReport
+from economyrpa.apps.<domain>.services import <Service>Client
+
+# Defining the Check Class
+class <check_name>(Check):
+    """
+    Ensure that <entity> meets <business_requirement>.
+
+    This check evaluates whether <specific_condition> to ensure <operational_benefit>.
+    - PASS: <description_of_compliant_state>.
+    - FAIL: <description_of_non_compliant_state>.
+    """
+
+    def execute(self):
+        """Execute the check logic.
+
+        Returns:
+            A list of reports containing the result of the check.
+        """
+        findings = []
+        
+        # Fetch resources using the Service Client (Django ORM wrapper)
+        resources = <Service>Client.get_all_<entities>()
+
+        for resource in resources:
+            report = CheckReport(
+                metadata=self.metadata(),
+                resource=resource
+            )
+            
+            # Default state
+            report.status = "PASS"
+            report.status_extended = f"Resource {resource.name} is compliant."
+
+            # Check Logic
+            if <non_compliant_condition>:
+                report.status = "FAIL"
+                report.status_extended = f"Resource {resource.name} failed validation: <reason>."
+            
+            findings.append(report)
+        
+        return findings
+
+```
+
+### Determine Check Status
+
+Each check **must** populate the `report.status` field:
+
+* `PASS` – The resource or process meets the defined business rule.
+* `FAIL` – The resource violates the rule or requires attention.
+* `MANUAL` – The status cannot be determined automatically and requires human intervention via the Dashboard.
+
+### Define Severity Levels
+
+Severity indicates the business impact of a failed check. Defined in the metadata JSON:
+
+* `critical` – Blocks core business operations or represents high financial risk (e.g., "Invoice missing tax ID").
+* `high` – Significant impact on reporting or compliance (e.g., "Budget exceeded").
+* `medium` – Process inefficiency or minor data quality issue.
+* `low` – Formatting or housekeeping issue.
+* `informational` – Insights that do not require immediate action.
+
+### Identify Resources
+
+Each check **must** uniquely identify the resource being audited to allow the UI to link directly to it.
+
+* **Resource ID**: Use the UUID of the Django Model (`report.resource_id = resource.uuid`).
+* **Resource Name**: Use the human-readable string (`report.resource_name = resource.display_name`).
+
+## Metadata Structure
+
+Each check requires a `<check_name>.metadata.json` file. This drives the information displayed in the "Smooth UI" Dashboard.
+
+### Example Metadata File
+
+```json
+{
+  "Domain": "finance",
+  "CheckID": "finance_invoicing_invoice_tax_id",
+  "CheckTitle": "Invoice has valid Tax ID",
+  "ServiceName": "invoicing",
+  "Severity": "critical",
+  "ResourceType": "Invoice",
+  "Description": "This check verifies that the invoice contains a valid Tax ID associated with the vendor to ensure fiscal compliance.",
+  "BusinessImpact": "Missing Tax IDs can lead to penalties from tax authorities and prevent the ERP from processing the payment.",
+  "Remediation": {
+    "Code": {
+      "DjangoShell": "invoice = Invoice.objects.get(id='...'); invoice.tax_id = '...'; invoice.save()",
+      "Manual": "1. Open EconomyRPA Dashboard.\n2. Go to Invoices.\n3. Select the Invoice.\n4. Click 'Edit' and enter the Tax ID."
+    },
+    "Recommendation": {
+      "Text": "Ensure all vendors are onboarded with complete fiscal data before generating invoices.",
+      "Url": "[https://docs.economyrpa.com/checks/finance_invoicing_invoice_tax_id](https://docs.economyrpa.com/checks/finance_invoicing_invoice_tax_id)"
+    }
+  },
+  "Categories": ["compliance", "fiscal"],
+  "RelatedTo": ["finance_vendor_onboarding_complete"]
+}
+
+```
+
+### Metadata Fields
+
+#### Domain
+
+The high-level business area (e.g., `finance`, `hr`, `it`).
+
+#### CheckID
+
+Unique identifier matching the folder and filename.
+
+#### CheckTitle
+
+A concise title describing the **PASS** state (e.g., "Contract is signed" rather than "Check for unsigned contracts").
+
+#### ServiceName
+
+The Django app or service module responsible for this data.
+
+#### ResourceType
+
+The name of the business entity (e.g., `Invoice`, `Employee`, `Server`).
+
+#### BusinessImpact (formerly Risk)
+
+Explain **why** this matters to the business. Focus on financial, operational, or legal consequences.
+
+#### Remediation
+
+* **Code**: Provide a Python snippet or API call to fix the issue programmatically.
+* **Manual**: Step-by-step instructions for the UI.
+* **Recommendation**: General best practices.
+
+## Best Practices for EconomyRPA Checks
+
+* **One Check, One Rule**: Do not bundle multiple validations into a single check. If you are checking for "Paid" and "Signed", make two checks.
+* **Use Service Clients**: Never access `Model.objects` directly inside a check if a Service layer exists. This ensures adherence to RBAC and tenancy rules.
+* **Meaningful Status Messages**: The `status_extended` string is what the end-user reads in the Dashboard. Make it clear and actionable.
+
+

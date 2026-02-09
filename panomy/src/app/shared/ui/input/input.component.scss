@@ -1,0 +1,330 @@
+/* =================================================================
+   INPUT COMPONENT - Smooth Design System
+   Campos de formulario reutilizables con validación visual
+   ================================================================= */
+
+/*
+   INPUT WRAPPER
+   Contenedor principal para label, input y mensajes
+*/
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  /* Tamaños */
+  &-sm {
+    .input-base {
+      font-size: var(--font-size-sm);
+      padding: var(--spacing-xs) var(--spacing-sm);
+    }
+  }
+
+  &-md {
+    .input-base {
+      font-size: var(--font-size-base);
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+  }
+
+  &-lg {
+    .input-base {
+      font-size: var(--font-size-lg);
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+  }
+
+  /* Estados */
+  &.input-focused .input-container {
+    background: var(--bg-surface);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1); /* primary with opacity */
+  }
+
+  &.input-error .input-container {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1); /* error with opacity */
+  }
+
+  &.input-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.input-readonly {
+    background: var(--bg-surface-hover);
+  }
+}
+
+/*
+   INPUT LABEL
+   Etiqueta descriptiva del campo
+*/
+.input-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin: 0;
+  transition: color var(--transition-smooth);
+
+  &.required {
+    color: var(--color-primary);
+  }
+
+  .required-asterisk {
+    color: var(--color-error);
+    margin-left: var(--spacing-xs);
+  }
+}
+
+/*
+   INPUT HINT
+   Texto de ayuda debajo del label
+*/
+.input-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin: 0;
+  font-style: italic;
+}
+
+/*
+   INPUT CONTAINER
+   Envoltorio del input con prefijos/sufijos
+*/
+.input-container {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-smooth);
+
+  &:focus-within {
+    border-color: var(--color-primary);
+  }
+
+  .input-error & {
+    border-color: var(--color-error);
+  }
+}
+
+/*
+   INPUT BASE
+   Estilos del elemento input principal
+*/
+.input-base {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  transition: letter-spacing 0.2s ease-in-out, color 0.2s ease-in-out;
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:readonly {
+    cursor: default;
+  }
+
+  /* Specific input types */
+  &[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  &[type="search"] {
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+/*
+   INPUT PREFIX/SUFFIX
+   Elementos decorativos o funcionales alrededor del input
+*/
+.input-prefix,
+.input-suffix {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-sm);
+  color: var(--text-secondary);
+  background: var(--bg-surface-hover);
+
+  &:first-child {
+    border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+  }
+
+  &:last-child {
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+  }
+
+  &:has(.password-toggle) {
+    background: transparent;
+    border-left: none; // Evita la línea divisoria si no quieres que parezca un bloque aparte
+    padding-right: var(--spacing-sm);
+  }
+}
+
+.password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.1rem; // Ajuste para el emoji o icono
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; // Hover circular
+  transition: all var(--transition-smooth);
+  cursor: pointer;
+  opacity: 0.7;
+  filter: grayscale(100%);
+
+  &:hover {
+    background: var(--bg-surface-hover);
+    color: var(--color-primary);
+    opacity: 1;
+    transform: scale(1.1);
+    filter: none;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.suffix-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.password-toggle {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-smooth);
+
+  &:hover {
+    background: var(--bg-surface-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+  }
+}
+
+/*
+   INPUT ERROR
+   Mensaje de error de validación
+*/
+.input-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+
+  &:before {
+    content: "⚠️ ";
+    margin-right: var(--spacing-xs);
+  }
+}
+
+/*
+   CHARACTER COUNT
+   Contador de caracteres opcional
+*/
+.character-count {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: right;
+  align-self: flex-end;
+}
+
+/*
+   DARK THEME ADAPTATIONS
+*/
+.dark-theme {
+  .input-container {
+    background: var(--bg-surface);
+    border-color: var(--border-color);
+  }
+
+  .input-prefix,
+  .input-suffix {
+    background: var(--bg-surface-hover);
+    color: var(--text-secondary);
+  }
+
+  .input-base {
+    color: var(--text-primary);
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+}
+
+/*
+   RESPONSIVE ADAPTATIONS
+*/
+@media (max-width: 768px) {
+  .input-wrapper {
+    &-lg .input-base {
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-size: var(--font-size-base);
+    }
+  }
+
+  .input-base {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/*
+   ACCESSIBILITY FOCUS STYLES
+*/
+.input-base:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/*
+   ANIMATIONS
+*/
+@keyframes input-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.input-wrapper.input-error .input-container {
+  animation: input-shake 0.3s ease-in-out;
+}
+
+.input-wrapper.input-focused {
+  .password-toggle {
+    color: var(--color-primary);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,361 @@
+/* =================================================================
+   CARD COMPONENT - Smooth Design System
+   Contenedores de contenido con variantes y efectos smooth
+   ================================================================= */
+
+/* 
+   CARD BASE
+   Estilos fundamentales para todas las cards
+*/
+.card-base {
+  background: var(--bg-surface);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-smooth);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  /* Eliminar bordes de browser */
+  border: none;
+  outline: none;
+}
+
+/* 
+   CARD VARIANTS
+   Diferentes estilos visuales según contexto
+*/
+
+/* Default - Card estándar */
+.card-default {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Elevated - Con más profundidad */
+.card-elevated {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+}
+
+/* Outlined - Sin sombra, bordes más visibles */
+.card-outlined {
+  border: 2px solid var(--border-color);
+  box-shadow: none;
+  
+  &:hover {
+    border-color: var(--color-secondary);
+    background: var(--bg-surface-hover);
+  }
+}
+
+/* Interactive - Con efectos hover más notables */
+.card-interactive {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+  }
+}
+
+/* 
+   CARD CLICKABLE
+   Añade interactividad a cualquier variante
+*/
+.card-clickable {
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* 
+   CARD SIZES
+   Diferentes tamaños para varios contextos
+*/
+.card-sm {
+  padding: var(--spacing-sm);
+  
+  .card-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .card-subtitle {
+    font-size: var(--font-size-sm);
+  }
+}
+
+.card-md {
+  padding: var(--spacing-md);
+  
+  .card-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .card-subtitle {
+    font-size: var(--font-size-base);
+  }
+}
+
+.card-lg {
+  padding: var(--spacing-lg);
+  
+  .card-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .card-subtitle {
+    font-size: var(--font-size-lg);
+  }
+}
+
+.card-xl {
+  padding: var(--spacing-xl);
+  
+  .card-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .card-subtitle {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* 
+   CARD HEADER
+   Sección superior con título y acciones
+*/
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-header-content {
+  flex: 1;
+}
+
+.card-title {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.card-subtitle {
+  margin: var(--spacing-xs) 0 0 0;
+  font-weight: var(--font-weight-normal);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.card-header-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 
+   CARD MEDIA
+   Sección para imágenes o media
+*/
+.card-media {
+  margin: calc(var(--spacing-md) * -1) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform var(--transition-smooth);
+}
+
+.card-image-full {
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-interactive:hover .card-image {
+  transform: scale(1.05);
+}
+
+/* 
+   CARD CONTENT
+   Contenido principal
+*/
+.card-content {
+  flex: 1;
+  color: var(--text-primary);
+  line-height: 1.6;
+  
+  /* Estilos por defecto para contenido */
+  p {
+    margin: 0 0 var(--spacing-md) 0;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  ul, ol {
+    margin: 0 0 var(--spacing-md) 0;
+    padding-left: var(--spacing-lg);
+  }
+}
+
+/* 
+   CARD FOOTER
+   Sección inferior para acciones o metadata
+*/
+.card-footer {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+/* 
+   DARK THEME ADAPTATIONS
+*/
+.dark-theme {
+  .card-base {
+    background: var(--bg-surface);
+    border-color: var(--border-color);
+  }
+  
+  .card-title {
+    color: var(--text-primary);
+  }
+  
+  .card-subtitle {
+    color: var(--text-secondary);
+  }
+  
+  .card-footer {
+    border-color: var(--border-color);
+  }
+}
+
+/* 
+   RESPONSIVE ADAPTATIONS
+*/
+@media (max-width: 768px) {
+  .card-lg {
+    padding: var(--spacing-md);
+    
+    .card-title {
+      font-size: var(--font-size-lg);
+    }
+    
+    .card-subtitle {
+      font-size: var(--font-size-base);
+    }
+  }
+  
+  .card-xl {
+    padding: var(--spacing-lg);
+    
+    .card-title {
+      font-size: var(--font-size-xl);
+    }
+    
+    .card-subtitle {
+      font-size: var(--font-size-lg);
+    }
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+  
+  .card-header-actions {
+    justify-content: flex-end;
+  }
+  
+  .card-image-full {
+    height: 150px;
+  }
+}
+
+/* 
+   ANIMATIONS
+*/
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-base {
+  animation: card-fade-in var(--transition-smooth) ease-out;
+}
+
+/* 
+   ACCESSIBILITY
+*/
+.card-base:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-md);
+}
+
+/* 
+   GROUP LAYOUTS
+   Para grids de cards
+*/
+.card-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card-grid-sm {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.card-grid-lg {
+  display: grid;
+  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}

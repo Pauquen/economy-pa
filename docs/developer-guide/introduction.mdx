@@ -1,0 +1,231 @@
+---
+title: 'Introduction to developing in EconomyRPA'
+---
+
+Thanks for your interest in contributing to EconomyRPA!
+
+EconomyRPA can be extended and improved in various ways. This guide provides the different ways to contribute and how to get started.
+
+<Warning>
+Maintainers will assess whether a change fits the project roadmap and scope before merging.
+</Warning>
+
+## Contributing to EconomyRPA
+
+### Review Current Issues
+Check out our [GitHub Issues](https://github.com/Pauquen/economy-pa/issues) page for ideas to contribute.
+<Columns cols={2}>
+  <Card title="Good First Issue" icon="github" href="https://github.com/Pauquen/economy-pa/issues">
+    We tag issues as `good first issue` for new contributors. These are typically well-defined and manageable in scope.
+  </Card>
+  <Card title="Help Wanted" icon="github" href="https://github.com/Pauquen/economy-pa/issues">
+    We tag issues as `help wanted` for other issues that require more time to complete.
+  </Card>
+</Columns>
+
+### Expand EconomyRPA's Capabilities
+EconomyRPA is constantly evolving. Contributions to checks, services, or integrations help improve the tool for everyone. Here is how to get involved:
+
+<Columns cols={2}>
+  <Card title="Adding New Checks" href="/developer-guide/checks">
+    Do you want to improve the diversification and expansion of business areas in EconomyRPA? You can contribute by writing new checks.
+  </Card>
+  <Card title="Adding New Services" icon="server" href="/developer-guide/services">
+    One automation service for your favorite field of work is missing? Suggest it. Do not forget to include relevant checks to validate functionality.
+  </Card>
+  <Card title="Adding New Output Formats" icon="file" href="/developer-guide/outputs">
+    Want to tailor how results are displayed or exported? You can add custom output formats.
+  </Card>
+  <Card title="Adding New Integrations" icon="link" href="/developer-guide/integrations">
+    EconomyRPA can work with other tools and platforms through integrations.
+  </Card>
+</Columns>
+
+### Improve Documentation
+Help make EconomyRPA more accessible by enhancing our documentation, fixing typos, or adding examples/tutorials.
+
+<Columns cols={2}>
+  <Card title="Documentation Guide" icon="book" href="/developer-guide/documentation">
+    Enhance our documentation, fix typos, or add examples/tutorials.
+  </Card>
+</Columns>
+
+### Bug Fixes
+If you find any issues or bugs, you can report them in the [GitHub Issues](https://github.com/prowler-cloud/prowler/issues) page and if you want you can also fix them.
+
+<Columns cols={2}>
+  <Card title="Report a Bug" icon="bug" href="https://github.com/Pauquen/economy-pa/issues">
+    Report or fix issues or bugs.
+  </Card>
+</Columns>
+
+## Setting up your development environment
+
+### Prerequisites
+
+Before proceeding, ensure the following:
+
+- Git is installed.
+- Python 3.9 or higher is installed.
+
+### Forking the EconomyRPA Repository
+
+Fork the EconomyRPA GitHub repository to contribute to EconomyRPA. This allows proposing changes, submitting new features, and fixing bugs. For guidance on forking, refer to the GitHub.
+
+### Cloning Your Forked Repository
+
+Once your fork is created, clone it using the following commands (replace `<your-github-user>` with your GitHub username):
+
+```
+git clone https://github.com/<your-github-user>/economy-pa
+cd economy-pa
+```
+
+### Dependency Management and Environment Isolation
+
+To prevent conflicts between environments, we recommend using `poetry`, a Python dependency management solution. Install it by following the [instructions](https://python-poetry.org/docs/#installation).
+
+### Installing Dependencies
+
+To install all required dependencies, including those needed for development, run:
+
+```
+poetry install --with dev
+eval $(poetry env activate)
+```
+
+<Warning>
+Starting from Poetry v2.0.0, `poetry shell` has been deprecated in favor of `poetry env activate`.
+If your poetry version is below 2.0.0 you must keep using `poetry shell` to activate your environment.
+In case you have any doubts, consult the [Poetry environment activation guide](https://python-poetry.org/docs/managing-environments/#activating-the-environment).
+
+</Warning>
+
+
+### Pre-Commit Hooks
+
+This repository uses Git pre-commit hooks managed by the [pre-commit](https://pre-commit.com/) tool, it is installed with `poetry install --with dev`. Next, run the following command in the root of this repository:
+
+```shell
+pre-commit install
+```
+
+Successful installation should produce the following output:
+
+```shell
+pre-commit installed at .git/hooks/pre-commit
+```
+
+### Code Quality and Security Checks
+
+Before merging pull requests, several automated checks and utilities ensure code security and updated dependencies:
+
+<Note>
+These should have been already installed if `poetry install --with dev` was already run.
+
+</Note>
+- [`bandit`](https://pypi.org/project/bandit/) for code security review.
+- [`safety`](https://pypi.org/project/safety/) and [`dependabot`](https://github.com/features/security) for dependencies.
+- [`hadolint`](https://github.com/hadolint/hadolint) and [`dockle`](https://github.com/goodwithtech/dockle) for container security.
+- [`Snyk`](https://docs.snyk.io/integrations/snyk-container-integrations/container-security-with-docker-hub-integration) for container security in Docker Hub.
+- [`clair`](https://github.com/quay/clair) for container security in Amazon ECR.
+- [`vulture`](https://pypi.org/project/vulture/), [`flake8`](https://pypi.org/project/flake8/), [`black`](https://pypi.org/project/black/), and [`pylint`](https://pypi.org/project/pylint/) for formatting and best practices.
+
+Additionally, ensure the latest version of [`TruffleHog`](https://github.com/trufflesecurity/trufflehog) is installed to scan for sensitive data in the code. Follow the official [installation guide](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#floppy_disk-installation) for setup.
+
+### AI-Driven Contributions
+
+If you are using AI assistants to help with your contributions, EconomyRPA provides specialized resources to enhance AI-driven development:
+
+- **AGENTS.md Files**: Each component of the EconomyRPA monorepo includes an `AGENTS.md` file that contains specific guidelines for AI agents working on that component. These files provide context about project structure, coding standards, and best practices. When working on a specific component, refer to the relevant `AGENTS.md` file (e.g., `prowler/AGENTS.md`, `ui/AGENTS.md`, `api/AGENTS.md`) to ensure your AI assistant follows the appropriate guidelines.
+
+These resources help ensure that AI-assisted contributions maintain consistency with EconomyRPA's codebase and development practices.
+
+### Dependency Management
+For proper code documentation, refer to the following and follow the code documentation practices presented there: [Google Python Style Guide - Comments and Docstrings](https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings).
+
+<Note>
+If you encounter issues when committing to the EconomyRPA repository, use the `--no-verify` flag with the `git commit` command.
+
+</Note>
+### Repository Folder Structure
+
+The EconomyRPA codebase layout helps quickly locate where to add new features, checks, or integrations. The following is a high-level overview from the root of the repository:
+
+```
+panomy
+|-- Other files
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── PREMIUM_SIDEBAR_REPORT.md
+│   ├── public
+│   │   └── favicon.ico
+│   ├── README.md
+│   ├── src
+│   │   ├── app
+│   │   │   ├── app
+│   │   │   ├── app.config.server.ts
+│   │   │   ├── app.config.ts
+│   │   │   ├── app.html
+│   │   │   ├── app.routes.server.ts
+│   │   │   ├── app.routes.ts
+│   │   │   ├── app.scss
+│   │   │   ├── app.spec.ts
+│   │   │   ├── app.ts
+│   │   │   ├── app.ts.bak
+│   │   │   ├── features
+│   │   │   ├── models
+│   │   │   ├── services
+│   │   │   └── shared
+│   │   ├── assets
+│   │   │   └── images
+│   │   ├── index.html
+│   │   ├── main.server.ts
+│   │   ├── main.ts
+│   │   ├── server.ts
+│   │   └── styles.scss
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   └── tsconfig.spec.json
+└── skills
+    ├── ai-sdk-5
+    │   └── SKILL.md
+    ├── angular-20
+    │   └── SKILL.md
+    ├── django-drf
+    │   └── SKILL.md
+    ├── economyrpa
+    │   ├── references
+    │   │   └── economy-docs.md
+    │   └── SKILL.md
+    ├── economyrpa-api
+    ├── economyrpa-changelog
+    ├── economyrpa-compliance
+    ├── economyrpa-compliance-review
+    ├── economyrpa-docs
+    ├── economyrpa-mcp
+    ├── economyrpa-test-api
+    ├── economyrpa-test-sdk
+    ├── economyrpa-test-ui
+    ├── economyrpa-ui
+    ├── playwright
+    │   ├── references
+    │   └── SKILL.md
+    ├── pytest
+    │   └── SKILL.md
+    ├── scss
+    │   └── SKILL.md
+    ├── skill-creator
+    └── typescript
+        └── SKILL.md
+
+
+```
+
+## Sending the Pull Request
+
+- **Context** and **Description** of the change: This will help the reviewers to understand the change and the purpose of the pull request.
+- **Steps to review**: A detailed description of how to review the change.
+- **Checklist**: A mandatory checklist of the things that should be reviewed before merging the pull request.
+
+For more details on testing go to the [Testing section](/developer-guide/unit-testing) of this documentation.

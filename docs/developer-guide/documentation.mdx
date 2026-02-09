@@ -1,0 +1,46 @@
+---
+title: 'To Contribute to the Documentation'
+---
+
+## Documentation Structure
+
+The EconomyRPA documentation is organized into four primary sections to support both business users and technical contributors:
+
+- **Getting Started**: Provides an overview of the EconomyRPA platform, installation steps for the Docker containers, and a quick start guide to running your first automation.
+- **User Guide**: Comprehensive instructions for the **EconomyRPA Dashboard**. This includes managing Business Units, configuring RPAs, and interpreting Financial Reports.
+- **Developer Guide**: Technical documentation for contributors looking to extend the platform. This section covers the **Angular 20** frontend architecture, **Django REST Framework** services, creating new compliance checks, and implementing the "Smooth UI" system.
+- **Style Guide**: The definitive source for our Brand Voice, UI design tokens (SCSS variables), and communication standards.
+
+## To Develop Locally
+
+<Steps>
+  <Step title="Install Mintlify CLI">
+    To preview changes locally, install the Mintlify CLI.
+    ```bash
+    npm i -g mint
+    ```
+    For detailed instructions, consult the [Mintlify documentation](https://www.mintlify.com/docs/installation).
+  </Step>
+
+  <Step title="Preview Documentation Locally">
+    Start the local development server to visualize your changes in real-time.
+
+    ```bash
+    mint dev
+    ```
+
+    A local preview of the documentation will be available at `http://localhost:3000`.
+  </Step>
+
+  <Step title="Make Documentation Changes">
+    Edit existing Markdown (`.mdx`) files inside the `docs` directory or create new documents.
+
+    **Note on Style:** When writing, adhere to the **EconomyRPA Brand Voice**:
+    * Use verbal constructions (e.g., "To configure..." instead of "Configuration of...").
+    * Ensure all headers use **Title Case**.
+    * Verify that UI references (buttons, menus) match the actual **Smooth UI** elements.
+
+    To add new sections, update the `mint.json` file to include them in the navigation structure.
+  </Step>
+</Steps>
+

@@ -1,0 +1,261 @@
+<div class="business-container smooth-fade-in">
+  <!-- Header -->
+  <header class="business-header">
+    <div class="header-content">
+      <div class="header-info">
+        <h1 class="page-title">Business Units</h1>
+        <p class="page-subtitle">
+          Manage your organization's business units and their automation processes
+        </p>
+      </div>
+      
+      <div class="header-actions">
+        <app-button
+          variant="primary"
+          size="md"
+          iconRight="➕"
+          (onClick)="openCreateModal()"
+        >
+          New Business Unit
+        </app-button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search and Filters -->
+  <section class="search-section">
+    <div class="search-container">
+      <app-input
+        [(ngModel)]="searchTerm"
+        [ngModelOptions]="{ standalone: true }"
+        name="search"
+        type="search"
+        placeholder="Search business units..."
+        prefix="🔍"
+        (ngModelChange)="onSearchChange($event)"
+        size="lg"
+      />
+      
+      <div class="filter-controls">
+        <select 
+          class="filter-select"
+          [value]="statusFilter()"
+          (change)="onStatusFilterChange($any($event.target).value)"
+        >
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="archived">Archived</option>
+        </select>
+        
+        <app-button
+          variant="secondary"
+          size="md"
+          (onClick)="resetFilters()"
+        >
+          Reset
+        </app-button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Overview -->
+  <section class="stats-overview">
+    <div class="stat-cards">
+      <div class="stat-card">
+        <span class="stat-number">{{ totalUnits() }}</span>
+        <span class="stat-label">Total Units</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">{{ activeUnits() }}</span>
+        <span class="stat-label">Active</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">{{ totalProcesses() }}</span>
+        <span class="stat-label">Total Processes</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">{{ formatTotalSavings() }}</span>
+        <span class="stat-label">Monthly Savings</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Table -->
+  <main class="business-main">
+    <app-card variant="outlined" size="lg" class="table-card">
+      <div class="table-header">
+        <h3 class="table-title">Business Units ({{ filteredUnits().length }})</h3>
+        
+        <div class="table-actions">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="refreshData()"
+          >
+            Refresh
+          </app-button>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        @if (filteredUnits().length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">🏢</div>
+            <h3>No business units found</h3>
+            <p>Try adjusting your search or filters, or create a new business unit.</p>
+            <app-button
+              variant="primary"
+              size="md"
+              (onClick)="openCreateModal()"
+            >
+              Create Business Unit
+            </app-button>
+          </div>
+        } @else {
+          <table class="business-table">
+            <thead>
+              <tr>
+                <th (click)="sortBy('name')" class="sortable">
+                  Name
+                  @if (sortField() === 'name') {
+                    <span class="sort-icon">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                  }
+                </th>
+                <th (click)="sortBy('code')" class="sortable">
+                  Code
+                  @if (sortField() === 'code') {
+                    <span class="sort-icon">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                  }
+                </th>
+                <th>Status</th>
+                <th>Processes</th>
+                <th>Efficiency</th>
+                <th>Monthly Savings</th>
+                <th>Manager</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (unit of paginatedUnits(); track unit.id) {
+                <tr class="table-row" [class]="unit.status">
+                  <td class="name-cell">
+                    <div class="unit-info">
+                      <h4 class="unit-name">{{ unit.name }}</h4>
+                      @if (unit.description) {
+                        <p class="unit-description">{{ unit.description }}</p>
+                      }
+                    </div>
+                  </td>
+                  <td class="code-cell">
+                    <span class="unit-code">{{ unit.code }}</span>
+                  </td>
+                  <td class="status-cell">
+                    <span class="status-badge" [class]="unit.status">
+                      {{ unit.status }}
+                    </span>
+                  </td>
+                  <td class="processes-cell">
+                    <span class="process-count">{{ unit.metrics.totalProcesses }}</span>
+                  </td>
+                  <td class="efficiency-cell">
+                    <div class="efficiency-bar">
+                      <div 
+                        class="efficiency-fill"
+                        [style.width.%]="unit.metrics.efficiency"
+                        [class]="getEfficiencyClass(unit.metrics.efficiency)"
+                      ></div>
+                    </div>
+                    <span class="efficiency-text">{{ unit.metrics.efficiency }}%</span>
+                  </td>
+                  <td class="savings-cell">
+                    <span class="savings-amount">{{ formatSavings(unit.metrics.monthlySavings) }}</span>
+                  </td>
+                  <td class="manager-cell">
+                    <div class="manager-info">
+                      <span class="manager-name">{{ unit.manager?.fullName || 'Not assigned' }}</span>
+                      <span class="manager-email">{{ unit.manager?.email || '' }}</span>
+                    </div>
+                  </td>
+                  <td class="actions-cell">
+                    <div class="action-buttons">
+                      <button 
+                        class="action-btn view-btn"
+                        (click)="viewUnit(unit)"
+                        title="View details"
+                      >
+                        👁️
+                      </button>
+                      <button 
+                        class="action-btn edit-btn"
+                        (click)="editUnit(unit)"
+                        title="Edit unit"
+                      >
+                        ✏️
+                      </button>
+                      @if (unit.status !== 'archived') {
+                        <button 
+                          class="action-btn archive-btn"
+                          (click)="archiveUnit(unit)"
+                          title="Archive unit"
+                        >
+                          📦
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+      
+      <!-- Pagination -->
+      @if (filteredUnits().length > pageSize()) {
+        <div class="pagination">
+          <div class="pagination-info">
+            Showing {{ (currentPage() - 1) * pageSize() + 1 }} to 
+            {{ min(currentPage() * pageSize(), filteredUnits().length) }} 
+            of {{ filteredUnits().length }} units
+          </div>
+          
+          <div class="pagination-controls">
+            <app-button
+              variant="secondary"
+              size="sm"
+              [disabled]="currentPage() === 1"
+              (onClick)="previousPage()"
+            >
+              Previous
+            </app-button>
+            
+            <span class="page-info">
+              Page {{ currentPage() }} of {{ totalPages() }}
+            </span>
+            
+            <app-button
+              variant="secondary"
+              size="sm"
+              [disabled]="currentPage() === totalPages()"
+              (onClick)="nextPage()"
+            >
+              Next
+            </app-button>
+          </div>
+        </div>
+      }
+    </app-card>
+  </main>
+</div>
+
+<!-- Create/Edit Modal (placeholder for now) -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>{{ modalMode() === 'create' ? 'Create' : 'Edit' }} Business Unit</h3>
+      <p>Modal functionality to be implemented with forms</p>
+      <app-button variant="secondary" (click)="closeModal()">Close</app-button>
+    </div>
+  </div>
+}

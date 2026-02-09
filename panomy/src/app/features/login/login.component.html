@@ -1,0 +1,122 @@
+<div class="login-container smooth-fade-in">
+  <div class="login-card surface-card">
+    <!-- Header -->
+    <header class="login-header">
+      <div class="login-logo">
+        <h1 class="logo-text">EconomyRPA</h1>
+        <p class="logo-subtitle">Automated Workflow Management</p>
+      </div>
+    </header>
+
+    <!-- Theme Toggle Outside Header -->
+    <div class="theme-toggle-container">
+      <button
+        class="theme-toggle-premium"
+        (click)="toggleTheme()"
+        [attr.aria-label]="isDarkTheme() ? 'Switch to light mode' : 'Switch to dark mode'"
+        [class.dark-active]="isDarkTheme()"
+        title="Toggle theme"
+      >
+        <div class="toggle-track">
+          <div class="toggle-thumb">
+            <svg class="icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <main class="login-form">
+      @if (errorMessage()) {
+        <div class="error-message">
+          <p>{{ errorMessage() }}</p>
+          <button
+            type="button"
+            class="error-close"
+            (click)="clearError()"
+            aria-label="Dismiss error"
+          >
+            ×
+          </button>
+        </div>
+      }
+
+      <form
+        class="login-form-wrapper"
+        (ngSubmit)="onSubmit()"
+      >
+        <div class="form-group">
+          <app-input
+            [(modelValue)]="email"
+            type="email"
+            label="Email Address"
+            placeholder="Enter your email"
+            [required]="true"
+            [disabled]="isLoading()"
+            size="lg"
+          />
+        </div>
+
+        <div class="form-group">
+          <app-input
+            [(modelValue)]="password"
+            type="password"
+            label="Password"
+            placeholder="Enter your password"
+            [required]="true"
+            [disabled]="isLoading()"
+            [showCharacterCount]="true"
+            [maxLength]="50"
+            size="lg"
+          />
+        </div>
+
+        <div class="form-actions">
+          <app-button
+            type="submit"
+            variant="primary"
+            size="lg"
+            [isLoading]="isLoading()"
+            [disabled]="!isFormValid()"
+            style="width: 100%"
+          >
+            {{ isLoading() ? 'Signing in...' : 'Sign In' }}
+          </app-button>
+        </div>
+      </form>
+
+      <!-- OAuth Section -->
+      <div class="oauth-section">
+        <div class="oauth-divider">
+          <span class="divider-text">or continue with</span>
+        </div>
+
+        <div class="oauth-buttons" style="display: flex; justify-content: center; min-height: 44px;">
+          <div id="google-btn"></div>
+        </div>
+      </div>
+
+      <div class="login-help">
+        <a routerLink="/forgot-password" class="forgot-link">
+          Forgot your password?
+        </a>
+        <span class="help-divider">•</span>
+        <a routerLink="/register" class="register-link">
+          Create account
+        </a>
+      </div>
+    </main>
+</div>

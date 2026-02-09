@@ -1,0 +1,268 @@
+<div class="process-container smooth-fade-in">
+  <!-- Header -->
+  <header class="process-header">
+    <div class="header-content">
+      <div class="header-info">
+        <h1 class="page-title">Business Processes</h1>
+        <p class="page-subtitle">
+          Design, automate and monitor your business workflows
+        </p>
+      </div>
+      
+      <div class="header-actions">
+        <app-button
+          variant="secondary"
+          size="md"
+          (onClick)="importProcess()"
+        >
+          📁 Import
+        </app-button>
+        
+        <app-button
+          variant="primary"
+          size="md"
+          iconRight="➕"
+          (onClick)="createNewProcess()"
+        >
+          New Process
+        </app-button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search and Filters -->
+  <section class="search-section">
+    <div class="search-grid">
+      <div class="search-input">
+          <app-input
+            [(ngModel)]="searchQuery"
+            type="text"
+            placeholder="Search processes by name or description..."
+            size="lg"
+            icon="🔍"
+          />
+      </div>
+      
+      <div class="filter-group">
+        <select 
+          class="filter-select"
+          [(ngModel)]="selectedCategory"
+          (change)="onFilterChange()"
+        >
+          <option value="">All Categories</option>
+          <option value="finance">💰 Finance</option>
+          <option value="hr">👥 HR</option>
+          <option value="operations">⚙️ Operations</option>
+          <option value="customer_service">🎯 Customer Service</option>
+          <option value="it">💻 IT</option>
+          <option value="compliance">🔒 Compliance</option>
+          <option value="other">📋 Other</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <select 
+          class="filter-select"
+          [(ngModel)]="selectedStatus"
+          (change)="onFilterChange()"
+        >
+          <option value="">All Status</option>
+          <option value="active">✅ Active</option>
+          <option value="inactive">⏸️ Inactive</option>
+          <option value="testing">🧪 Testing</option>
+          <option value="maintenance">🔧 Maintenance</option>
+          <option value="deprecated">📦 Deprecated</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <select 
+          class="filter-select"
+          [(ngModel)]="selectedPriority"
+          (change)="onFilterChange()"
+        >
+          <option value="">All Priorities</option>
+          <option value="critical">🔴 Critical</option>
+          <option value="high">🟠 High</option>
+          <option value="medium">🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Overview -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card total">
+        <div class="stat-icon">📊</div>
+        <div class="stat-info">
+          <h3>{{ totalProcesses() }}</h3>
+          <p>Total Processes</p>
+          <div class="stat-trend">
+            <span class="trend-value">+12%</span>
+            <span class="trend-period">vs last month</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card active">
+        <div class="stat-icon">✅</div>
+        <div class="stat-info">
+          <h3>{{ activeProcesses() }}</h3>
+          <p>Active</p>
+          <div class="stat-trend">
+            <span class="trend-value">+5%</span>
+            <span class="trend-period">efficiency</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card automated">
+        <div class="stat-icon">🤖</div>
+        <div class="stat-info">
+          <h3>{{ automatedProcesses() }}</h3>
+          <p>Automated</p>
+          <div class="stat-trend">
+            <span class="trend-value">+8%</span>
+            <span class="trend-period">coverage</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card efficiency">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-info">
+          <h3>{{ averageEfficiency() }}%</h3>
+          <p>Avg Efficiency</p>
+          <div class="stat-trend">
+            <span class="trend-value">+3%</span>
+            <span class="trend-period">improvement</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Processes Grid -->
+  <main class="processes-main">
+    @if (filteredProcesses().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No processes found</h3>
+        <p>Try adjusting your filters or create a new process</p>
+        <app-button
+          variant="primary"
+          size="md"
+          (onClick)="createNewProcess()"
+        >
+          Create First Process
+        </app-button>
+      </div>
+    } @else {
+      <div class="processes-grid">
+        @for (process of filteredProcesses(); track process.id) {
+          <div class="process-card" [class]="getPriorityClass(process.priority)">
+            <!-- Card Header -->
+            <div class="card-header">
+              <div class="process-info">
+                <h4 class="process-name">{{ process.name }}</h4>
+                <p class="process-description">{{ process.description || 'No description available' }}</p>
+                <div class="process-code">
+                  <span class="code-label">Code:</span>
+                  <span class="code-value">{{ process.code }}</span>
+                </div>
+              </div>
+              <div class="process-meta">
+                <span class="category-badge">
+                  {{ getCategoryIcon(process.category) }} {{ process.category }}
+                </span>
+                <span class="status-badge" [class]="'status-' + process.status">
+                  {{ getStatusIcon(process.status) }} {{ process.status }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Priority Indicator -->
+            <div class="priority-indicator">
+              <span class="priority-dot" [class]="getPriorityClass(process.priority)"></span>
+              <span class="priority-label">{{ getPriorityIcon(process.priority) }} {{ process.priority }}</span>
+            </div>
+
+            <!-- Process Metrics -->
+            <div class="process-metrics">
+              <div class="metric-item">
+                <span class="metric-label">Duration</span>
+                <span class="metric-value">{{ process.metrics.avgExecutionTime }}min</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Success Rate</span>
+                <span class="metric-value">{{ process.metrics.successRate }}%</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Monthly Runs</span>
+                <span class="metric-value">{{ process.metrics.monthlyExecutions }}</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Cost Savings</span>
+                <span class="metric-value">${{ process.metrics.costSavings.toLocaleString() }}</span>
+              </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+              <div class="progress-header">
+                <span class="progress-label">Success Rate</span>
+                <span class="progress-value">{{ process.metrics.successRate }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div 
+                  class="progress-fill" 
+                  [class]="getSuccessRateClass(process.metrics.successRate)"
+                  [style.width.%]="process.metrics.successRate"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="process-actions">
+              <app-button
+                variant="ghost"
+                size="sm"
+                (click)="viewProcessDetails(process.id)"
+              >
+                📊 Details
+              </app-button>
+              
+              @if (process.status === 'active') {
+                <app-button
+                  variant="secondary"
+                  size="sm"
+                  (click)="pauseProcess(process.id)"
+                >
+                  ⏸️ Pause
+                </app-button>
+              } @else {
+                <app-button
+                  variant="primary"
+                  size="sm"
+                  (click)="runProcess(process.id)"
+                >
+                  ▶️ Run
+                </app-button>
+              }
+              
+              <app-button
+                variant="ghost"
+                size="sm"
+                (click)="editProcess(process.id)"
+              >
+                ✏️ Edit
+              </app-button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

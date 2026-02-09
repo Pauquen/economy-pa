@@ -1,0 +1,221 @@
+---
+title: 'AI Skills System'
+---
+
+This guide explains the AI Skills system that provides on-demand context, "Smooth UI" patterns, and architectural rules to AI agents working with the EconomyRPA codebase.
+
+<Info>
+**What are AI Skills?** Skills are structured instructions that help AI agents (Claude Code, Cursor, Copilot, etc.) understand EconomyRPA's conventions, Angular 20 Signals implementation, Django DRF patterns, and best practices.
+</Info>
+
+## Architecture Overview
+
+
+
+```mermaid
+graph LR
+    subgraph FLOW["AI Skills Architecture"]
+        A["AI Agent"] -->|"1. matches trigger"| B["AGENTS.md"]
+        B -->|"2. loads"| C["Skill"]
+        C -->|"3. provides"| D["Patterns<br/>Templates<br/>Commands"]
+        C -->|"4. references"| E["Local Docs"]
+        D --> F["Correct Output"]
+        E --> F
+    end
+
+    style A fill:#1e3a5f,stroke:#4a9eff,color:#fff
+    style B fill:#5c4d1a,stroke:#ffd700,color:#fff
+    style C fill:#1a4d1a,stroke:#4caf50,color:#fff
+    style E fill:#4a1a4d,stroke:#ba68c8,color:#fff
+    style F fill:#1a4d2e,stroke:#66bb6a,color:#fff
+
+```
+
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant A as AI Agent
+    participant R as AGENTS.md
+    participant S as Skill
+    participant AS as assets/
+    participant RF as references/
+    participant D as Local Docs
+
+    U->>A: "Create a Finance Invoice Check"
+
+    Note over A: Analyze request context
+
+    A->>R: Find matching skill trigger
+    R-->>A: economyrpa-compliance matches
+
+    A->>S: Load SKILL.md
+    S-->>A: Patterns, rules, templates, commands
+
+    Note over A: Need code template?
+
+    A->>AS: Read assets/check_template.py
+    AS-->>A: Check implementation template
+
+    Note over A: Need more details?
+
+    A->>RF: Read references/economy-docs.md
+    RF-->>A: Points to local docs
+
+    A->>D: Read docs/developer-guide/checks.mdx
+    D-->>A: Full documentation
+
+    Note over A: Execute with full context
+
+    A->>U: Creates check with correct patterns
+
+```
+
+## Before vs After
+
+```mermaid
+graph TD
+    subgraph COMPARISON["BEFORE vs AFTER"]
+        direction LR
+
+        subgraph BEFORE["Without Skills"]
+            B1["AI guesses styles"]
+            B2["Uses ngModules (Legacy)"]
+            B3["Hardcoded Hex Colors"]
+            B4["Web searches for docs"]
+            B5["Inconsistent UI"]
+        end
+
+        subgraph AFTER["With Skills"]
+            A1["AI loads Smooth UI patterns"]
+            A2["Uses Standalone/Signals"]
+            A3["First-time right"]
+            A4["Local docs referenced"]
+            A5["Consistent Branding"]
+        end
+    end
+
+    style BEFORE fill:#5c1a1a,stroke:#ef5350,color:#fff
+    style AFTER fill:#1a4d1a,stroke:#66bb6a,color:#fff
+
+```
+
+## Complete Architecture
+
+```mermaid
+flowchart TB
+    subgraph ENTRY["ENTRY POINT"]
+        AGENTS["AGENTS.md<br/>━━━━━━━━━━━━━━━━━<br/>• Available skills registry<br/>• Skill → Trigger mapping<br/>• Component navigation"]
+    end
+
+    subgraph SKILLS["SKILLS LIBRARY"]
+        direction TB
+
+        subgraph GENERIC["Generic Skills"]
+            G1["typescript"]
+            G2["angular-20"]
+            G3["scss"]
+            G4["pytest"]
+            G5["playwright"]
+            G6["django-drf"]
+            G7["ai-sdk-5"]
+        end
+
+        subgraph ECONOMYRPA["EconomyRPA Skills"]
+            P1["economyrpa"]
+            P2["economyrpa-ui"]
+            P3["economyrpa-api"]
+            P4["economyrpa-compliance"]
+            P5["economyrpa-compliance-review"]
+            P6["economyrpa-mcp"]
+            P7["economyrpa-docs"]
+            P8["economyrpa-changelog"]
+        end
+
+        subgraph TESTING["Testing Skills"]
+            T1["economyrpa-test-sdk"]
+            T2["economyrpa-test-api"]
+            T3["economyrpa-test-ui"]
+        end
+
+        subgraph META["Meta Skills"]
+            M1["skill-creator"]
+            M2["skill-sync"]
+        end
+    end
+
+    subgraph STRUCTURE["SKILL STRUCTURE"]
+        direction LR
+
+        SKILLMD["SKILL.md<br/>━━━━━━━━━━━━━━<br/>• Frontmatter<br/>• Smooth UI Rules<br/>• Decision trees<br/>• Code examples<br/>• Commands<br/>• Keywords"]
+
+        ASSETS["assets/<br/>━━━━━━━━━━━━━━<br/>• Code templates<br/>• JSON schemas<br/>• Config examples"]
+
+        REFS["references/<br/>━━━━━━━━━━━━━━<br/>• Local doc paths<br/>• No web URLs<br/>• Single source"]
+    end
+
+    subgraph DOCS["DOCUMENTATION"]
+        direction TB
+        DD["docs/developer-guide/"]
+        D1["checks.mdx"]
+        D2["services.mdx"]
+        D3["ui-patterns.mdx"]
+        D4["api-guidelines.mdx"]
+        D5["..."]
+
+        DD --> D1
+        DD --> D2
+        DD --> D3
+        DD --> D4
+        DD --> D5
+    end
+
+    ENTRY --> SKILLS
+    SKILLS --> STRUCTURE
+    SKILLMD --> ASSETS
+    SKILLMD --> REFS
+    REFS -.->|"points to"| DOCS
+
+    style ENTRY fill:#1e3a5f,stroke:#4a9eff,color:#fff
+    style GENERIC fill:#5c4d1a,stroke:#ffd700,color:#fff
+    style ECONOMYRPA fill:#1a4d1a,stroke:#66bb6a,color:#fff
+    style TESTING fill:#4d1a3d,stroke:#f06292,color:#fff
+    style META fill:#4a1a4d,stroke:#ba68c8,color:#fff
+    style STRUCTURE fill:#5c3d1a,stroke:#ffb74d,color:#fff
+    style DOCS fill:#1a3d4d,stroke:#4dd0e1,color:#fff
+
+```
+
+## Skills Included
+
+| Type | Skills |
+| --- | --- |
+| **Generic** | typescript, angular-20, scss, pytest, playwright, django-drf, ai-sdk-5 |
+| **EconomyRPA** | economyrpa, economyrpa-ui, economyrpa-api, economyrpa-mcp, economyrpa-compliance, economyrpa-compliance-review, economyrpa-docs, economyrpa-changelog |
+| **Testing** | economyrpa-test-sdk, economyrpa-test-api, economyrpa-test-ui |
+| **Meta** | skill-creator, skill-sync |
+
+## Skill Structure
+
+Each skill follows the [Agent Skills spec](https://agentskills.io) tailored for EconomyRPA:
+
+```
+skills/{skill-name}/
+├── SKILL.md          # Patterns, UI rules, decision trees
+├── assets/           # Code templates (e.g., Angular components, Django Views)
+└── references/       # Links to local docs (single source of truth)
+
+```
+
+## Key Design Decisions
+
+1. **Self-contained skills** - Critical "Smooth UI" patterns inline for fast loading.
+2. **Local doc references** - Points directly to `docs/developer-guide/*.mdx`.
+3. **Single source of truth** - Skills reference docs, ensuring alignment with the Brand Voice.
+4. **On-demand loading** - AI loads only what's needed (e.g., loads `scss` only when styling).
+
+## Creating New Skills
+
+Use the `skill-creator` meta-skill to create new skills that follow the EconomyRPA Agent Skills spec. See `AGENTS.md` for the full list of available skills and their triggers.
+

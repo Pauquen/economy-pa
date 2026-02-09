@@ -1,0 +1,657 @@
+// Business Process Component - Professional Corporate Styling
+// Modern enterprise-grade design with smooth interactions
+
+// Design tokens
+$header-height: 80px;
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Color palette - Professional
+$primary-color: #2563eb;
+$primary-dark: #1e40af;
+$secondary-color: #64748b;
+$success-color: #059669;
+$warning-color: #d97706;
+$error-color: #dc2626;
+$info-color: #0891b2;
+
+// Semantic colors for priority
+$critical-color: #dc2626;
+$high-color: #ea580c;
+$medium-color: #ca8a04;
+$low-color: #16a34a;
+
+// Grays
+$gray-50: #f8fafc;
+$gray-100: #f1f5f9;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e1;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+
+// Shadows
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+// Border radius
+$radius-sm: 0.375rem;
+$radius-md: 0.5rem;
+$radius-lg: 0.75rem;
+$radius-xl: 1rem;
+
+// Animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Main container
+.process-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: $spacing-lg;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Header section
+.process-header {
+  background: white;
+  border-radius: $radius-xl;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $gray-200;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-lg;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .header-info {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $gray-900;
+      margin: 0 0 $spacing-xs 0;
+      background: linear-gradient(135deg, $primary-color, $primary-dark);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+      color: $gray-600;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: $spacing-sm;
+  }
+}
+
+// Search section
+.search-section {
+  background: white;
+  border-radius: $radius-xl;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $gray-200;
+
+  .search-grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: $spacing-md;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+    }
+
+    .search-input {
+      grid-column: span 1;
+    }
+
+    .filter-group {
+      position: relative;
+
+      .filter-select {
+        width: 100%;
+        padding: $spacing-sm $spacing-md;
+        border: 2px solid $gray-200;
+        border-radius: $radius-md;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: $gray-700;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Stats section
+.stats-section {
+  margin-bottom: $spacing-lg;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-md;
+
+    .stat-card {
+      background: white;
+      border-radius: $radius-xl;
+      padding: $spacing-lg;
+      box-shadow: $shadow-md;
+      border: 1px solid $gray-200;
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, $primary-color, $primary-dark);
+      }
+
+      &.total::before {
+        background: linear-gradient(90deg, $primary-color, $primary-dark);
+      }
+
+      &.active::before {
+        background: linear-gradient(90deg, $success-color, #047857);
+      }
+
+      &.automated::before {
+        background: linear-gradient(90deg, $info-color, #0e7490);
+      }
+
+      &.efficiency::before {
+        background: linear-gradient(90deg, $warning-color, #b45309);
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $radius-lg;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(30, 64, 175, 0.1));
+      }
+
+      .stat-info {
+        flex: 1;
+
+        h3 {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $gray-900;
+          margin: 0;
+          line-height: 1;
+        }
+
+        p {
+          font-size: 0.875rem;
+          color: $gray-600;
+          margin: $spacing-xs 0 $spacing-sm 0;
+          font-weight: 500;
+        }
+
+        .stat-trend {
+          display: flex;
+          align-items: center;
+          gap: $spacing-xs;
+
+          .trend-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $success-color;
+          }
+
+          .trend-period {
+            font-size: 0.75rem;
+            color: $gray-500;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Main content
+.processes-main {
+  min-height: 400px;
+
+  .empty-state {
+    text-align: center;
+    padding: $spacing-xl;
+    background: white;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-md;
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: $spacing-md;
+    }
+
+    h3 {
+      color: $gray-800;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      color: $gray-600;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  .processes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: $spacing-lg;
+
+    .process-card {
+      background: white;
+      border-radius: $radius-xl;
+      box-shadow: $shadow-md;
+      border: 1px solid $gray-200;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+      animation: slideIn 0.4s ease-out;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+      }
+
+      // Priority border indicators
+      &.priority-critical {
+        border-left: 4px solid $critical-color;
+      }
+
+      &.priority-high {
+        border-left: 4px solid $high-color;
+      }
+
+      &.priority-medium {
+        border-left: 4px solid $medium-color;
+      }
+
+      &.priority-low {
+        border-left: 4px solid $low-color;
+      }
+
+      // Card header
+      .card-header {
+        padding: $spacing-md;
+        border-bottom: 1px solid $gray-100;
+
+        .process-info {
+          margin-bottom: $spacing-sm;
+
+          .process-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: $gray-900;
+            margin: 0 0 $spacing-xs 0;
+            line-height: 1.3;
+          }
+
+          .process-description {
+            font-size: 0.875rem;
+            color: $gray-600;
+            margin: 0 0 $spacing-xs 0;
+            line-height: 1.4;
+          }
+
+          .process-code {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+
+            .code-label {
+              font-size: 0.75rem;
+              color: $gray-500;
+              font-weight: 500;
+            }
+
+            .code-value {
+              font-size: 0.875rem;
+              font-family: 'JetBrains Mono', 'Fira Code', monospace;
+              background: $gray-100;
+              padding: 2px 6px;
+              border-radius: $radius-sm;
+              color: $gray-700;
+              font-weight: 600;
+            }
+          }
+        }
+
+        .process-meta {
+          display: flex;
+          gap: $spacing-sm;
+          flex-wrap: wrap;
+
+          .category-badge,
+          .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: $radius-sm;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+          }
+
+          .category-badge {
+            background: linear-gradient(135deg, $info-color, #0e7490);
+            color: white;
+          }
+
+          .status-badge {
+            &.status-active {
+              background: linear-gradient(135deg, $success-color, #047857);
+              color: white;
+            }
+
+            &.status-testing {
+              background: linear-gradient(135deg, $warning-color, #b45309);
+              color: white;
+            }
+
+            &.status-maintenance {
+              background: linear-gradient(135deg, $secondary-color, $gray-600);
+              color: white;
+            }
+
+            &.status-inactive {
+              background: $gray-200;
+              color: $gray-700;
+            }
+          }
+        }
+      }
+
+      // Priority indicator
+      .priority-indicator {
+        padding: $spacing-md;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        .priority-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          animation: pulse 2s infinite;
+
+          &.priority-critical {
+            background: $critical-color;
+          }
+
+          &.priority-high {
+            background: $high-color;
+          }
+
+          &.priority-medium {
+            background: $medium-color;
+          }
+
+          &.priority-low {
+            background: $low-color;
+          }
+        }
+
+        .priority-label {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: $gray-700;
+        }
+      }
+
+      // Metrics section
+      .process-metrics {
+        padding: $spacing-md;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-md;
+
+        .metric-item {
+          .metric-label {
+            font-size: 0.75rem;
+            color: $gray-500;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 2px;
+          }
+
+          .metric-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: $gray-900;
+          }
+        }
+      }
+
+      // Progress section
+      .progress-section {
+        padding: $spacing-md;
+        border-top: 1px solid $gray-100;
+
+        .progress-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $spacing-xs;
+
+          .progress-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: $gray-600;
+          }
+
+          .progress-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $gray-900;
+          }
+        }
+
+        .progress-bar {
+          width: 100%;
+          height: 6px;
+          background: $gray-200;
+          border-radius: 3px;
+          overflow: hidden;
+
+          .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+
+            &.success-excellent {
+              background: linear-gradient(90deg, $success-color, #047857);
+            }
+
+            &.success-good {
+              background: linear-gradient(90deg, $info-color, #0e7490);
+            }
+
+            &.success-fair {
+              background: linear-gradient(90deg, $warning-color, #b45309);
+            }
+
+            &.success-poor {
+              background: linear-gradient(90deg, $error-color, #b91c1c);
+            }
+          }
+        }
+      }
+
+      // Actions section
+      .process-actions {
+        padding: $spacing-md;
+        display: flex;
+        gap: $spacing-sm;
+        border-top: 1px solid $gray-100;
+      }
+    }
+  }
+}
+
+// Dark theme support - Better adaptation
+:root.dark-theme,
+:host-context(.dark-theme) {
+  .process-container {
+    background: linear-gradient(135deg, $gray-900 0%, $gray-800 100%);
+  }
+
+  .process-header,
+  .search-section,
+  .processes-main .empty-state {
+    background: $gray-800;
+    border-color: $gray-700;
+  }
+
+  .processes-grid .process-card {
+    background: $gray-800;
+    border-color: $gray-700;
+
+    .card-header {
+      border-color: $gray-700;
+    }
+
+    .progress-section {
+      border-color: $gray-700;
+    }
+
+    .process-actions {
+      border-color: $gray-700;
+    }
+  }
+
+  .header-info .page-title {
+    color: white;
+  }
+
+  .header-info .page-subtitle {
+    color: $gray-400;
+  }
+
+  // Fix dark theme colors
+  .stats-section .stats-grid .stat-card {
+    background: $gray-800;
+    border-color: $gray-700;
+
+    .stat-info h3 {
+      color: white;
+    }
+
+    .stat-info p {
+      color: $gray-400;
+    }
+  }
+
+  .search-section .search-grid .filter-group .filter-select {
+    background: $gray-700;
+    border-color: $gray-600;
+    color: $gray-200;
+
+    &:hover {
+      border-color: $primary-color;
+      background: $gray-600;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .process-container {
+    padding: $spacing-sm;
+  }
+
+  .processes-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .search-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
